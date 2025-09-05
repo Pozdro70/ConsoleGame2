@@ -29,6 +29,6 @@ class MapManager
 {
 public:
 	void loadMapRoomFiles() {
-
+		
 	}
 };
