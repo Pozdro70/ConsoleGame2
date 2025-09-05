@@ -7,12 +7,12 @@
 
 //Typ pomieszczenia
 enum RoomType {
-	IRoom,
-	TRoom,
-	LRoom,
-	endRoom,
-	XRoom,
-	SpecialRoom
+	IRoom=1,
+	TRoom=2,
+	LRoom=3,
+	endRoom=4,
+	XRoom=5,
+	SpecialRoom=6
 };
 
 //Klasa pomieszczenia
@@ -83,19 +83,35 @@ class MapManager
 public:
 	std::vector<Room> loadMapRooms()
 	{
-
-		
 		std::vector<Room> rFiles;
 		rFiles=loadMapRoomFiles();
+		
 
 		bool inRoomSection = false;
 		std::string roomline;
+		std::string specialRoomLine;
+
 		for (Room &room : rFiles)
 		{
-			std::ifstream roomFile(mainFilePath.append(room.fname));
+			std::ifstream roomFile(mainFilePath+room.fname);
 			getline(roomFile, roomline);
+			std::stringstream roomHeaderLine1(roomline);
+			getline(roomHeaderLine1, specialRoomLine, ':');
+			getline(roomHeaderLine1, specialRoomLine, ':');
+			room.name = specialRoomLine;
+			
 			getline(roomFile, roomline);
+			std::stringstream roomHeaderLine2(roomline);
+			getline(roomHeaderLine2, specialRoomLine, ':');
+			getline(roomHeaderLine2, specialRoomLine, ':');
+			room.roomType = static_cast<RoomType>(std::atoi(specialRoomLine.c_str()));
+
 			getline(roomFile, roomline);
+			std::stringstream roomHeaderLine3(roomline);
+			getline(roomHeaderLine3, specialRoomLine, ':');
+			getline(roomHeaderLine3, specialRoomLine, ':');
+			room.passages = std::atoi(specialRoomLine.c_str());
+
 			getline(roomFile, roomline);
 			inRoomSection = true;
 			while (getline(roomFile, roomline)) {
@@ -105,7 +121,8 @@ public:
 				}
 				room.roomImage.emplace_back(roomline);
 			}
-
+			roomFile.close();
+			
 			
 		}
 

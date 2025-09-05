@@ -1,4 +1,5 @@
 ver=1.0
 rooms:
 1-IRoom1.mroom;
+2-IRoom2.mroom;
 endrooms

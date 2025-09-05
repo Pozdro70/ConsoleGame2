@@ -1,0 +1,9 @@
+//Typ pomieszczenia
+enum RoomType {
+	IRoom=1,
+	TRoom=2,
+	LRoom=3,
+	endRoom=4,
+	XRoom=5,
+	SpecialRoom=6
+};

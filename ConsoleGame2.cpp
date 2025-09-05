@@ -14,6 +14,8 @@ int main()
 	MapManager mapManager;
 	std::vector<Room> rooms;
 	rooms=mapManager.loadMapRooms();
-
-	std::cout << rooms[0].roomImage[0];
+	for (std::string i :rooms[1].roomImage) {
+		std::cout << i<<"\n";
+	}
+	
 }
