@@ -1,18 +1,12 @@
-rname:Four_way_room_1
-rtype:5
-rpassages:4
+rname:Two_way_room_1+1
+rtype:2
+rpassages:3
 exitrot:
 2
-1
 3
 endrot;
-exitsoffset:
-6;0
-endexitoffset;
 room:
-     ║ ║
-     ║ ║
-  ╔══╝ ╚══╗
+  ╔═══════╗
 ══╝       ╚══
 
 ══╗       ╔══

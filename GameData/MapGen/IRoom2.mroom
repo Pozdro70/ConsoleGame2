@@ -4,6 +4,9 @@ rpassages:2
 exitrot:
 2
 endrot;
+exitsoffset:
+43;2
+endexitoffset;
 room:
   ╔════════════════════════════════════╗
 ══╝                                    ╚══

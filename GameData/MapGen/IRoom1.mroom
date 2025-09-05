@@ -1,9 +1,12 @@
-rname:One_way_room
+rname:One_way_room_1
 rtype:1
 rpassages:2
 exitrot:
 2
 endrot;
+exitsoffset:
+43;4
+endexitoffset;
 room:
   ╔════════════════════════════════════╗
   ║                                    ║

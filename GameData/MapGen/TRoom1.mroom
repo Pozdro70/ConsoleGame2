@@ -5,6 +5,10 @@ exitrot:
 2
 1
 endrot;
+exitsoffset:
+6;0
+13;3
+endexitoffset;
 room:
      ║ ║
      ║ ║
