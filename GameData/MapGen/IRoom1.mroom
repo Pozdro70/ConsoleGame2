@@ -1,6 +1,9 @@
 rname:One_way_room
 rtype:1
 rpassages:2
+exitrot:
+2
+endrot;
 room:
   ╔════════════════════════════════════╗
   ║                                    ║

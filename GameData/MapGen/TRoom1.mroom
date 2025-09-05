@@ -1,0 +1,16 @@
+rname:Two_way_room_1
+rtype:2
+rpassages:3
+exitrot:
+2
+1
+endrot;
+room:
+     ║ ║
+     ║ ║
+  ╔══╝ ╚══╗
+══╝       ╚══
+
+══╗       ╔══
+  ╚═══════╝
+roomend;

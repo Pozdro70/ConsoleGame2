@@ -1,0 +1,19 @@
+rname:Four_way_room_1
+rtype:5
+rpassages:4
+exitrot:
+2
+1
+3
+endrot;
+room:
+     ║ ║
+     ║ ║
+  ╔══╝ ╚══╗
+══╝       ╚══
+
+══╗       ╔══
+  ╚══╗ ╔══╝
+     ║ ║
+     ║ ║
+roomend;

@@ -7,3 +7,11 @@ enum RoomType {
 	XRoom=5,
 	SpecialRoom=6
 };
+
+//Rotacja wyjscia pomieszczenia patrzac od gory
+enum RoomExitRotation {
+	North=1,
+	East=2,
+	South=3,
+	West=4
+};

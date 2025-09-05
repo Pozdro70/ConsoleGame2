@@ -15,6 +15,14 @@ enum RoomType {
 	SpecialRoom=6
 };
 
+//Rotacja wyjscia pomieszczenia patrzac od gory
+enum RoomExitRotation {
+	North=1,
+	East=2,
+	South=3,
+	West=4
+};
+
 //Klasa pomieszczenia
 class Room {
 public:
@@ -24,6 +32,7 @@ public:
 	RoomType roomType;
 	int passages;
 	std::vector<std::string> roomImage;
+	std::vector<RoomExitRotation> exitRotations;
 };
 
 
@@ -88,6 +97,7 @@ public:
 		
 
 		bool inRoomSection = false;
+		bool inRotSection=false;
 		std::string roomline;
 		std::string specialRoomLine;
 
@@ -113,16 +123,42 @@ public:
 			room.passages = std::atoi(specialRoomLine.c_str());
 
 			getline(roomFile, roomline);
-			inRoomSection = true;
-			while (getline(roomFile, roomline)) {
-				if (roomline == "roomend;") {
-					inRoomSection = false;
+			if (roomline == "exitrot:") {
+				inRotSection = true;
+			}
+			
+			
+			while (inRotSection) {
+				getline(roomFile, roomline);
+
+				if (roomline == "endrot;") {
+					inRotSection = false;
 					continue;
 				}
-				room.roomImage.emplace_back(roomline);
+				room.exitRotations.emplace_back(static_cast<RoomExitRotation>(std::atoi(roomline.c_str())));
+				
+			}
+			
+
+			if (!inRotSection) {
+				
+				getline(roomFile, roomline);
+				
+				if (roomline == "room:") { inRoomSection = true; }
+				if (inRoomSection)
+				{
+					while (getline(roomFile, roomline))
+					{
+						if (roomline == "roomend;")
+						{
+							inRoomSection = false;
+							continue;
+						}
+						room.roomImage.emplace_back(roomline);
+					}
+				}
 			}
 			roomFile.close();
-			
 			
 		}
 

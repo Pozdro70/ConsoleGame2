@@ -11,11 +11,17 @@ int main()
 	SetConsoleOutputCP(CP_UTF8); // Windows UTF-8 console
 	#endif
 	
+
+	//debug code to show all rooms
+
 	MapManager mapManager;
 	std::vector<Room> rooms;
 	rooms=mapManager.loadMapRooms();
-	for (std::string i :rooms[1].roomImage) {
-		std::cout << i<<"\n";
+	for (Room j : rooms) {
+		for (std::string i : j.roomImage) {
+			std::cout << i << "\n";
+		}
 	}
+	
 	
 }
