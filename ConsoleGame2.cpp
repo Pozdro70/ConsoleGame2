@@ -1,22 +1,11 @@
-﻿#include <iostream>
-#include "MapManager.h"
-#ifdef _WIN32
+﻿#ifdef _WIN32
 #include <windows.h>
 #endif
+#include <iostream>
+#include "MapManager.h"
 #include <vector>
+#include <ctime>
 
-void dispAllRooms() {
-	//debug code to show all rooms
-	MapManager mapManager;
-	std::vector<Room> rooms;
-	rooms = mapManager.loadMapRooms();
-	for (Room j : rooms) {
-		std::cout << "\n" << j.name << "\n";
-		for (std::string i : j.roomImage) {
-			std::cout << i << "\n";
-		}
-	}
-}
 
 
 int main()
@@ -25,7 +14,9 @@ int main()
 	SetConsoleOutputCP(CP_UTF8); // Windows UTF-8 console
 #endif
 
-	dispAllRooms();
+	//dispAllRooms();
+	MapManager mapManager;
+	mapManager.generateMap(time(nullptr));
 
 }
 
