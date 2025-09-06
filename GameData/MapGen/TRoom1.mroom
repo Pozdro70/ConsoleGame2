@@ -6,8 +6,8 @@ exitrot:
 1
 endrot;
 exitsoffset:
+13;4
 6;0
-13;3
 endexitoffset;
 room:
      ║ ║

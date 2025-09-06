@@ -33,6 +33,7 @@ public:
 	int passages;
 	std::vector<std::string> roomImage;
 	std::vector<RoomExitRotation> exitRotations;
+	std::vector<std::vector<int>> exitOffsets;
 };
 
 
@@ -98,6 +99,7 @@ public:
 
 		bool inRoomSection = false;
 		bool inRotSection=false;
+		bool inExitOSection = false;
 		std::string roomline;
 		std::string specialRoomLine;
 
@@ -143,7 +145,27 @@ public:
 			if (!inRotSection) {
 				
 				getline(roomFile, roomline);
-				
+				if (roomline == "exitsoffset:") { inExitOSection = true; }
+
+				if (inExitOSection) {
+					while (inExitOSection) {
+						getline(roomFile, roomline);
+						if (roomline == "endexitoffset;") { inExitOSection = false; continue; }
+						std::stringstream roomlineSs(roomline);
+						std::string roomlinesegment;
+						std::vector<int> temp = {0,0};
+
+						getline(roomlineSs, roomlinesegment, ';');
+						temp[0]= atoi(roomlinesegment.c_str());
+						
+						getline(roomlineSs, roomlinesegment, ';');
+						temp[1] = atoi(roomlinesegment.c_str());
+
+						room.exitOffsets.emplace_back(temp);
+					}
+				}
+
+				getline(roomFile, roomline);
 				if (roomline == "room:") { inRoomSection = true; }
 				if (inRoomSection)
 				{

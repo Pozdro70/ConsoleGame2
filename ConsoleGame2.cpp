@@ -26,5 +26,7 @@ int main()
 #endif
 
 	dispAllRooms();
+
+	//nie dziala bo zmienialem pliki .mroom dodalem offsety 
 }
 

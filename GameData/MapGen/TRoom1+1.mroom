@@ -5,6 +5,10 @@ exitrot:
 2
 3
 endrot;
+exitsoffset:
+13;2
+6;7
+endexitoffset;
 room:
   ╔═══════╗
 ══╝       ╚══
