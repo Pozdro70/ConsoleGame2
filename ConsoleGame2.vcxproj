@@ -128,10 +128,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleGame2.cpp" />
+    <ClCompile Include="ConsoleUtils.cpp" />
     <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="RoomManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConsoleUtils.h" />
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="RoomManager.h" />
   </ItemGroup>

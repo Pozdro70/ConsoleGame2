@@ -1,0 +1,21 @@
+rname:Starting_room_1
+rtype:4
+rpassages:1
+exitrot:
+2
+endrot;
+exitsoffset:
+27;4
+endexitoffset;
+entranceoffset:27;4
+room:
+╔═══════════════════════╗
+║                       ║
+║                       ║
+║                       ╚══
+║
+║                       ╔══
+║                       ║
+║                       ║
+╚═══════════════════════╝
+roomend;
