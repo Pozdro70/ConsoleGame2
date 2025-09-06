@@ -42,16 +42,19 @@ public:
 #pragma once
 class MapManager
 {
+	//Sciezki do plikow
 	std::string mapManagerVersion = "1.0";
 	std::string mainRoomsFilePath = "GameData/MapGen/rooms.mrooms";
 	std::string mainFilePath = "GameData/MapGen/";
-	std::vector<Room> loadMapRoomFiles() {
-		std::ifstream roomsHeaderFile(mainRoomsFilePath);
 
+	std::vector<Room> loadMapRoomFiles() {
+		//Wczytywanie pliku z glowna lista pomieszczen
+		std::ifstream roomsHeaderFile(mainRoomsFilePath);
+		
 		std::string line;
 		bool inRoomsSection = false;
 		std::vector<Room> roomsFiles;
-
+		//przetwazanie pliku z glowna lista pomieszczen
 		while(getline(roomsHeaderFile, line)) {
 			
 			
@@ -66,7 +69,7 @@ class MapManager
 
 			
 			if (inRoomsSection) {
-
+				//wczytywanie nazw plików z pomieszczeniami i ich ID do vectora
 				std::stringstream roomHeaderFLine(line);
 				std::string roomFileName;
 				int roomID;
@@ -87,44 +90,54 @@ class MapManager
 			
 		}
 
+		//Zamkniecie pliku z glowna lista pomieszczen
 		roomsHeaderFile.close();
 		return roomsFiles;
 	}
 
+	//Funkcja wczytujaca wszystkie pomieszczenia z plikow do vectora
 public:
 	std::vector<Room> loadMapRooms()
 	{
+		//pobieranie listy plikow z pomieszczeniami
 		std::vector<Room> rFiles;
 		rFiles=loadMapRoomFiles();
 		
-
+		//Zmiennne pomocnicze do przetwarzania plikow z pomieszczeniami
 		bool inRoomSection = false;
 		bool inRotSection=false;
 		bool inExitOSection = false;
 		std::string roomline;
 		std::string specialRoomLine;
 
+		//Wczytywanie kazdego pliku z pomieszczeniem i przetwarzanie jego zawartosci
 		for (Room &room : rFiles)
 		{
+			//otwieranie pliku z pomieszczeniem
 			std::ifstream roomFile(mainFilePath+room.fname);
+
+			//wczytywanie nazwy pomieszczenia
 			getline(roomFile, roomline);
 			std::stringstream roomHeaderLine1(roomline);
 			getline(roomHeaderLine1, specialRoomLine, ':');
 			getline(roomHeaderLine1, specialRoomLine, ':');
 			room.name = specialRoomLine;
-			
+
+			//wczytywanie typu pomieszczenia
 			getline(roomFile, roomline);
 			std::stringstream roomHeaderLine2(roomline);
 			getline(roomHeaderLine2, specialRoomLine, ':');
 			getline(roomHeaderLine2, specialRoomLine, ':');
 			room.roomType = static_cast<RoomType>(std::atoi(specialRoomLine.c_str()));
 
+			//wczytywanie liczby wyjsc z pomieszczenia
 			getline(roomFile, roomline);
 			std::stringstream roomHeaderLine3(roomline);
 			getline(roomHeaderLine3, specialRoomLine, ':');
 			getline(roomHeaderLine3, specialRoomLine, ':');
 			room.passages = std::atoi(specialRoomLine.c_str());
 
+			//wczytywanie rotacji wyjsc z pomieszczenia
 			getline(roomFile, roomline);
 			if (roomline == "exitrot:") {
 				inRotSection = true;
@@ -142,7 +155,7 @@ public:
 				
 			}
 			
-
+			//wczytywanie offsetow wyjsc i wejsc z pomieszczenia
 			if (!inRotSection) {
 				
 				getline(roomFile, roomline);
@@ -166,6 +179,7 @@ public:
 					}
 				}
 
+				//wczytywanie offsetu wejscia do pomieszczenia
 				getline(roomFile, roomline);
 
 				std::stringstream roomlineInOffsetSs(roomline);
@@ -182,6 +196,7 @@ public:
 				getline(roomlineInOffsetSsCord, roominoffset, ';');
 				room.entranceOffset.emplace_back(atoi(roominoffset.c_str()));
 
+				//wczytywanie grafiki pomieszczenia
 				getline(roomFile, roomline);
 				if (roomline == "room:") { inRoomSection = true; }
 				if (inRoomSection)
