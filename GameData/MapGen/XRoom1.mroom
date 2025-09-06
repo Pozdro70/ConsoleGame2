@@ -11,6 +11,7 @@ exitsoffset:
 6;1
 6;9
 endexitoffset;
+entranceoffset:1;4
 room:
      ║ ║
      ║ ║

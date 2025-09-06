@@ -9,6 +9,7 @@ exitsoffset:
 13;2
 6;7
 endexitoffset;
+entranceoffset:1;2
 room:
   ╔═══════╗
 ══╝       ╚══

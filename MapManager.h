@@ -34,6 +34,7 @@ public:
 	std::vector<std::string> roomImage;
 	std::vector<RoomExitRotation> exitRotations;
 	std::vector<std::vector<int>> exitOffsets;
+	std::vector<int> entranceOffset;
 };
 
 
@@ -164,6 +165,22 @@ public:
 						room.exitOffsets.emplace_back(temp);
 					}
 				}
+
+				getline(roomFile, roomline);
+
+				std::stringstream roomlineInOffsetSs(roomline);
+				std::string roominoffsetcord;
+				std::string roominoffset;
+
+				getline(roomlineInOffsetSs, roominoffsetcord, ':');
+				getline(roomlineInOffsetSs, roominoffsetcord, ':');
+
+				std::stringstream roomlineInOffsetSsCord(roominoffsetcord);
+				getline(roomlineInOffsetSsCord, roominoffset, ';');
+
+				room.entranceOffset.emplace_back(atoi(roominoffset.c_str()));
+				getline(roomlineInOffsetSsCord, roominoffset, ';');
+				room.entranceOffset.emplace_back(atoi(roominoffset.c_str()));
 
 				getline(roomFile, roomline);
 				if (roomline == "room:") { inRoomSection = true; }
