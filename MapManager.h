@@ -1,3 +1,8 @@
+﻿#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
 #include "RoomManager.h"
 #include <iostream>
 #include <random>
@@ -7,6 +12,7 @@
 #include <vector>
 #include <string>
 #include <stack>
+#include <conio.h>
 
 //funkcja debugujaca wyswietlajaca wszystkie wczytane pomieszczenia
 static void dispAllRooms() {
@@ -32,9 +38,15 @@ public:
 };
 
 class MapRoomCell {
+public:
 	bool visited;
 	Room room;
 	RoomType roomType;
+	int posX;
+	int posY;
+	int lastlyChosenSide;
+	int howManyPassages=0;
+	std::vector<RoomExitRotation> exitRotations;
 };
 
 #pragma once
@@ -52,6 +64,7 @@ public:
 	void generateMap(int mapseed) {
 		// Inicjalizacja generatora liczb losowych z podanym seedem
 		std::mt19937 randomGen(mapseed);
+		std::uniform_int_distribution<int> randomSideDist(1, 4); // Dystrybucja do losowania strony (1-4)
 		
 		//Wczytywanie pomieszczen
 		RoomManager roomManager;
@@ -77,9 +90,140 @@ public:
 		map.sizeX = 100;
 		map.sizeY = 100;
 
+		MapRoomCell defaultCell;
+		defaultCell.visited = false;
 
-		std::vector<std::vector<MapRoomCell>> mapCells;
-		std::stack<MapRoomCell> visitedMapCells;
+		std::vector<std::vector<MapRoomCell>> mapCells(map.sizeX,std::vector<MapRoomCell>(map.sizeY, defaultCell));
+		std::stack<MapRoomCell*> visitedMapCells;
+
+		int currentX = 0;
+		int currentY = 0;
+
+		/*
+		for (std::vector<MapRoomCell> mapCellX : mapCells) {
+			for (MapRoomCell mapCellY :mapCellX) {
+				mapCellY.visited = false;
+			}
+		}
+		*/
+		
+
+		visitedMapCells.push(&mapCells[0][0]);
+		mapCells[0][0].visited = true;
+		bool hasChanged=false;
+
+		int stepCount = 0;
+		std::vector<int> directionsTried;
+
+		while (!visitedMapCells.empty()) {
+			int randomSide = randomSideDist(randomGen); //losowanie strony z ktorej bedzie wyjscie z pomieszczenia startowego
+			hasChanged=false;
+			//std::cout << "Random side: " << randomSide << "\n";
+			
+
+			if (randomSide == 1 && (!hasChanged && !std::count(directionsTried.begin(), directionsTried.end(), 1))) {
+				
+				if (currentX < map.sizeX && currentY+1 < map.sizeY && currentX >=0 && currentY+1 >=0) {
+					//std::cout << "Checking cell: " << currentX << "," << currentY + 1 << "\n";
+					if (mapCells[currentX][currentY + 1].visited == false) {
+						currentY++;
+						hasChanged = true; directionsTried.clear();
+						//std::cout << "Moved to cell: " << currentX << "," << currentY << "\n";
+					}
+				}
+			}
+			else if (randomSide == 2 && (!hasChanged && !std::count(directionsTried.begin(), directionsTried.end(), 2))) {
+				if (currentX+1 < map.sizeX && currentY < map.sizeY && currentX+1 >=0 && currentY >=0) {
+					//std::cout << "Checking cell: " << currentX + 1 << "," << currentY << "\n";
+					if (mapCells[currentX+1][currentY].visited == false) {
+						currentX++;
+						hasChanged = true; directionsTried.clear();
+						//std::cout << "Moved to cell: " << currentX << "," << currentY << "\n";
+					}
+				}
+			}
+			else if (randomSide == 3 && (!hasChanged && !std::count(directionsTried.begin(), directionsTried.end(), 3))) {
+				if (currentX < map.sizeX && currentY - 1 < map.sizeY && currentX >=0 && currentY - 1 >= 0) {
+					//std::cout << "Checking cell: " << currentX << "," << currentY - 1 << "\n";
+					if (mapCells[currentX][currentY-1].visited == false) {
+						currentY--;
+						hasChanged = true; directionsTried.clear();
+						//std::cout << "Moved to cell: " << currentX << "," << currentY << "\n";
+					}
+				}
+			}
+			else if (randomSide == 4 && (!hasChanged && !std::count(directionsTried.begin(), directionsTried.end(), 4))) {
+				if (currentX-1 < map.sizeX && currentY < map.sizeY && currentX-1 >=0 && currentY >=0) {
+					//std::cout << "Checking cell: " << currentX - 1 << "," << currentY << "\n";
+					if (mapCells[currentX-1][currentY].visited == false) {
+						currentX--;
+						hasChanged = true; directionsTried.clear();
+						//std::cout << "Moved to cell: " << currentX << "," << currentY << "\n";
+					}
+				}
+			}
+			directionsTried.emplace_back(randomSide);
+			if (
+				   std::count(directionsTried.begin(), directionsTried.end(), 1)
+				&& std::count(directionsTried.begin(), directionsTried.end(), 2)
+				&& std::count(directionsTried.begin(), directionsTried.end(), 3)
+				&& std::count(directionsTried.begin(), directionsTried.end(), 4)
+				) {
+				
+					if (visitedMapCells.size()>1) {
+						
+						visitedMapCells.pop();
+						
+						currentX = visitedMapCells.top()->posX;
+						currentY = visitedMapCells.top()->posY;
+
+						//std::cout << "Backtracking to cell: " << currentX << "," << currentY << "\n";
+						directionsTried.clear();
+						directionsTried.emplace_back(mapCells[currentX][currentY].lastlyChosenSide);
+						
+						
+					}
+					else
+					{
+						break;
+					}
+			}
+
+			if (hasChanged) {
+				mapCells[currentX][currentY].visited = true;
+				visitedMapCells.push(&mapCells[currentX][currentY]);
+				mapCells[currentX][currentY].posX = currentX;
+				mapCells[currentX][currentY].posY = currentY;
+				//std::cout << "Visiting cell: " << currentX << "," << currentY << "\n";
+				mapCells[currentX][currentY].lastlyChosenSide = randomSide;
+				mapCells[currentX][currentY].howManyPassages++;
+				mapCells[currentX][currentY].exitRotations.emplace_back(static_cast<RoomExitRotation>(randomSide));
+				stepCount++;
+				directionsTried.clear();
+				
+			}
+		}
+		
+
+		clearConsole();
+
+		for (int i = 0; i < mapCells.size(); i++)
+		{
+			for (int j = 0; j < mapCells[i].size(); j++)
+			{
+				if(mapCells[j][i].exitRotations[0] == RoomExitRotation::North){ setCursorPos(mapCells[j][i].posX, mapCells[j][i].posY); std::cout << u8"╝"; }
+				if(mapCells[j][i].exitRotations[0] == RoomExitRotation::East){ setCursorPos(mapCells[j][i].posX, mapCells[j][i].posY); std::cout << u8"═"; }
+				if(mapCells[j][i].exitRotations[0] == RoomExitRotation::South){ setCursorPos(mapCells[j][i].posX, mapCells[j][i].posY); std::cout << u8"╗"; }
+				if(mapCells[j][i].exitRotations[0] == RoomExitRotation::West){ setCursorPos(mapCells[j][i].posX, mapCells[j][i].posY); std::cout << u8"L"; }
+				
+			}
+		}
+
+		
+		
+		
+
+
 		
 	}
 };

@@ -11,14 +11,13 @@
 
 int main()
 {
-#ifdef _WIN32
-	SetConsoleOutputCP(CP_UTF8); // Windows UTF-8 console
-#endif
-	
+	#ifdef _WIN32
+		SetConsoleOutputCP(CP_UTF8); // Windows UTF-8 console
+	#endif
 	
 
 	_getch(); // Pause before start
-	//dispAllRooms();
+	
 	
 	MapManager mapManager;
 	mapManager.generateMap(time(nullptr));

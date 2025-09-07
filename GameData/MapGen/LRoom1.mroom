@@ -1,0 +1,19 @@
+rname:Two_way_room_1
+rtype:3
+rpassages:2
+exitrot:
+3
+endrot;
+exitsoffset:
+8;7
+endexitoffset;
+entranceoffset:1;2
+room:
+  ╔═══════╗
+══╝       ║
+          ║ 
+══╗       ║
+  ╚══╗ ╔══╝
+     ║ ║
+     ║ ║
+roomend;

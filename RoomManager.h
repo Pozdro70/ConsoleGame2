@@ -220,5 +220,14 @@ public:
 		return rFiles;
 		
 	}
+
+	Room getRoomByID(int id, std::vector<Room> rooms) {
+		for (Room room : rooms) {
+			if (room.id == id) {
+				return room;
+			}
+		}
+		return Room{};
+	}
 };
 

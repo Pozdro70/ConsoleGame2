@@ -1,3 +1,4 @@
+#ifdef _WIN32
 #include <windows.h>
 
 static void setCursorPos(int x = 0, int y = 0)
@@ -28,7 +29,10 @@ static int getConsoleWidth() {
 	}
 
 }
-
+static void clearConsole() {
+	system("cls");
+}
+#endif
 
 #pragma once
 class ConsoleUtils
