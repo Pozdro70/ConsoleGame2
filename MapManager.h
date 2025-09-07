@@ -46,7 +46,7 @@ public:
 	int posY;
 	int lastlyChosenSide;
 	int howManyPassages=0;
-	std::vector<RoomExitRotation> exitRotations;
+	std::vector<int> exitRotations;
 };
 
 #pragma once
@@ -197,7 +197,7 @@ public:
 				//std::cout << "Visiting cell: " << currentX << "," << currentY << "\n";
 				mapCells[currentX][currentY].lastlyChosenSide = randomSide;
 				mapCells[currentX][currentY].howManyPassages++;
-				mapCells[currentX][currentY].exitRotations.emplace_back(static_cast<RoomExitRotation>(randomSide));
+				mapCells[currentX][currentY].exitRotations.emplace_back(randomSide);
 				stepCount++;
 				directionsTried.clear();
 				
@@ -207,15 +207,14 @@ public:
 
 		clearConsole();
 
-		for (int i = 0; i < mapCells.size(); i++)
-		{
-			for (int j = 0; j < mapCells[i].size(); j++)
-			{
-				if(mapCells[j][i].exitRotations[0] == RoomExitRotation::North){ setCursorPos(mapCells[j][i].posX, mapCells[j][i].posY); std::cout << u8"╝"; }
-				if(mapCells[j][i].exitRotations[0] == RoomExitRotation::East){ setCursorPos(mapCells[j][i].posX, mapCells[j][i].posY); std::cout << u8"═"; }
-				if(mapCells[j][i].exitRotations[0] == RoomExitRotation::South){ setCursorPos(mapCells[j][i].posX, mapCells[j][i].posY); std::cout << u8"╗"; }
-				if(mapCells[j][i].exitRotations[0] == RoomExitRotation::West){ setCursorPos(mapCells[j][i].posX, mapCells[j][i].posY); std::cout << u8"L"; }
-				
+		for (int x = 0; x < map.sizeX; x++) {
+			for (int y = 0; y < map.sizeY; y++) {
+				if (!mapCells[x][y].exitRotations.empty()) {
+					if(mapCells[x][y].exitRotations[0] == 1){ setCursorPos(mapCells[x][y].posX, mapCells[x][y].posY); std::cout << u8"╝"; }
+					if(mapCells[x][y].exitRotations[0] == 2){ setCursorPos(mapCells[x][y].posX, mapCells[x][y].posY); std::cout << u8"═"; }
+					if(mapCells[x][y].exitRotations[0] == 3){ setCursorPos(mapCells[x][y].posX, mapCells[x][y].posY); std::cout << u8"╗"; }
+					if(mapCells[x][y].exitRotations[0] == 4){ setCursorPos(mapCells[x][y].posX, mapCells[x][y].posY); std::cout << u8"L"; }
+				}
 			}
 		}
 
