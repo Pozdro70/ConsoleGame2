@@ -21,20 +21,25 @@ int main()
 	std::cin.tie(0);
 	*/
 
-	_getch(); // Pause before start
+	//_getch(); // Pause before start
 	
 	
 	MapManager mapManager;
 	GameMap gmap;
 	gmap=mapManager.generateMap(time(nullptr),"Game1", "Game1.msave", "InDev-0.1", 10, 10);
 	
-	for (int x = 0; x < gmap.sizeX; x++) {
-		for (int y = 0; y < gmap.sizeY; y++) {
-			setCursorPos(x, y); std::cout << gmap.mapImage[x][y].id;
+
+
+
+	//mapManager.saveGameMap(gmap);
+	GameMap gmap2;
+	gmap2 =mapManager.loadMapFromFile("Game1.msave");
+
+	for (int x = 0; x < gmap2.sizeX; x++) {
+		for (int y = 0; y < gmap2.sizeY; y++) {
+			setCursorPos(x, y); std::cout << gmap2.mapImage[x][y].id;
 		}
 	}
-
-	mapManager.saveGameMap(gmap);
 
 	//dispAllRooms();
 	return 0;

@@ -217,8 +217,6 @@ public:
 			}
 		}
 		
-		
-		clearConsole();
 
 		int foundRoomsRotCounter = 0;
 		for (int x = 0; x < map.sizeX; x++) {
@@ -271,7 +269,7 @@ public:
 		saveFile << "map:\n";
 		for (int x = 0; x < gmap.sizeX; x++) {
 			for (int y = 0; y < gmap.sizeY; y++) {
-				saveFile << gmap.mapImage[y][x].id;
+				saveFile << gmap.mapImage[y][x].id<<";";
 			}
 			saveFile << "\n";
 		}
@@ -283,23 +281,71 @@ public:
 	}
 
 	GameMap loadMapFromFile(std::string path) {
-		std::ifstream mapFile("GameData/Saves/"+path);
+
+		std::ifstream mapFile("GameData/Saves/" + path);
+		if (!mapFile.is_open()) {
+			std::cerr << "Failed to open map file: " << path << "\n";
+			return GameMap{};
+		}
 
 		GameMap gmap;
 		std::string line;
 
-		getline(mapFile, line);
-		getline(mapFile, line,':');
-		getline(mapFile, line,':');
-		gmap.saveName = line;
-		gmap.saveFileName = line + ".msave";
-		getline(mapFile, line,':');
-		getline(mapFile, line,':');
-		gmap.gameVersion = line;
-		
+		// --- Read header ---
+		getline(mapFile, line); // ver (skip)
+
+		getline(mapFile, line); // savename
+		gmap.saveName = line.substr(line.find(':') + 1);
+		gmap.saveFileName = gmap.saveName + ".msave";
+
+		getline(mapFile, line); // gamever
+		gmap.gameVersion = line.substr(line.find(':') + 1);
+
+		getline(mapFile, line); // sizex
+		gmap.sizeX = std::stoi(line.substr(line.find(':') + 1));
+
+		getline(mapFile, line); // sizey
+		gmap.sizeY = std::stoi(line.substr(line.find(':') + 1));
+
+		// --- Initialize map containers ---
+		gmap.mapImage.resize(gmap.sizeX, std::vector<Room>(gmap.sizeY));
+		std::vector<std::vector<int>> mapImageIDs(gmap.sizeX, std::vector<int>(gmap.sizeY, 0));
+
+		// --- Read map section ---
+		getline(mapFile, line); // should be "map:"
+		if (line != "map:") {
+			std::cerr << "Invalid map format in file: " << path << "\n";
+			return gmap;
+		}
+
+		RoomManager roomManager;
+		int y = 0;
+		while (getline(mapFile, line) && line != "endmap;") {
+			std::stringstream lineSS(line);
+			std::string segment;
+			int x = 0;
+
+			while (getline(lineSS, segment, ';')) {
+				if (segment.empty()) continue; // skip trailing ;
+				if (x < gmap.sizeX && y < gmap.sizeY) {
+					mapImageIDs[x][y] = std::stoi(segment);
+				}
+				x++;
+			}
+			y++;
+		}
+
 		mapFile.close();
+
+		// --- Convert IDs to Rooms ---
+		for (int x = 0; x < gmap.sizeX; x++) {
+			for (int y = 0; y < gmap.sizeY; y++) {
+				gmap.mapImage[x][y] = roomManager.getRoomByID(mapImageIDs[x][y], roomManager.loadMapRooms());
+			}
+		}
 
 		return gmap;
 	}
+
 };
 

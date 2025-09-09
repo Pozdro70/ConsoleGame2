@@ -227,7 +227,9 @@ public:
 				return room;
 			}
 		}
-		return Room{};
+		Room emptyRoom;
+		emptyRoom.id = 2137;
+		return emptyRoom;
 	}
 };
 
