@@ -283,9 +283,23 @@ public:
 	}
 
 	GameMap loadMapFromFile(std::string path) {
-		std::ifstream mapFile(path);
+		std::ifstream mapFile("GameData/Saves/"+path);
 
-		//todo:reading file logic
+		GameMap gmap;
+		std::string line;
+
+		getline(mapFile, line);
+		getline(mapFile, line,':');
+		getline(mapFile, line,':');
+		gmap.saveName = line;
+		gmap.saveFileName = line + ".msave";
+		getline(mapFile, line,':');
+		getline(mapFile, line,':');
+		gmap.gameVersion = line;
+		
+		mapFile.close();
+
+		return gmap;
 	}
 };
 
