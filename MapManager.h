@@ -31,6 +31,7 @@ static void dispAllRooms() {
 class GameMap {
 public:
 	std::string saveName;
+	std::string saveFileName;
 	std::string gameVersion;
 	std::vector<std::vector<Room>> mapImage;
 	int sizeX;
@@ -61,7 +62,7 @@ class MapManager
 	}
 
 public:
-	GameMap generateMap(int mapseed) {
+	GameMap generateMap(int mapseed, std::string saveNameinp,std::string saveFileNameinp, std::string gameVersioninp, int sizeXinp, int sizeYinp) {
 		// Inicjalizacja generatora liczb losowych z podanym seedem
 		std::mt19937 randomGen(mapseed);
 		std::uniform_int_distribution<int> randomSideDist(1, 4); // Dystrybucja do losowania strony (1-4)
@@ -85,10 +86,11 @@ public:
 		std::vector<std::string> mapFile;
 		GameMap map;
 
-		map.saveName = "NewMap1"; // TODO: naming not implemented yet
-		map.gameVersion = "0.0.1-InDev"; // TODO: versioning not implemented yet
-		map.sizeX = 100;
-		map.sizeY = 100;
+		map.saveName = saveNameinp; // TODO: naming not implemented yet
+		map.saveFileName = saveFileNameinp;
+		map.gameVersion = gameVersioninp; // TODO: versioning not implemented yet
+		map.sizeX = sizeXinp;
+		map.sizeY = sizeYinp;
 		
 		
 		for (int i = 0; i < map.sizeX; i++) {
@@ -255,10 +257,35 @@ public:
 				}
 			}
 		}
-
 		return map;
+	}
+
+	void saveGameMap(GameMap gmap) {
+		std::ofstream saveFile("GameData/Saves/" + gmap.saveFileName);
+
+		saveFile << "ver:1.0\n";
+		saveFile << "savename:"+gmap.saveName+"\n";
+		saveFile << "gamever:"+gmap.gameVersion+"\n";
+		saveFile << "sizex:"+std::to_string(gmap.sizeX)+"\n";
+		saveFile << "sizey:"+ std::to_string(gmap.sizeY)+"\n";
+		saveFile << "map:\n";
+		for (int x = 0; x < gmap.sizeX; x++) {
+			for (int y = 0; y < gmap.sizeY; y++) {
+				saveFile << gmap.mapImage[y][x].id;
+			}
+			saveFile << "\n";
+		}
+		saveFile << "endmap;";
+
+	
 		
-		
+		saveFile.close();
+	}
+
+	GameMap loadMapFromFile(std::string path) {
+		std::ifstream mapFile(path);
+
+		//todo:reading file logic
 	}
 };
 
