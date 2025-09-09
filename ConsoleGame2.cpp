@@ -16,7 +16,10 @@ int main()
 	#ifdef _WIN32
 		SetConsoleOutputCP(CP_UTF8); // Windows UTF-8 console
 	#endif
-	
+	/* FASTER PRINTING
+	std::ios_base::sync_with_stdio(0);
+	std::cin.tie(0);
+	*/
 
 	_getch(); // Pause before start
 	
