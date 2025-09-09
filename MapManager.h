@@ -28,11 +28,11 @@ static void dispAllRooms() {
 	}
 }
 
-class Map {
+class GameMap {
 public:
 	std::string saveName;
 	std::string gameVersion;
-	std::vector<std::vector<char>> mapImage;
+	std::vector<std::vector<Room>> mapImage;
 	int sizeX;
 	int sizeY;
 };
@@ -61,7 +61,7 @@ class MapManager
 	}
 
 public:
-	void generateMap(int mapseed) {
+	GameMap generateMap(int mapseed) {
 		// Inicjalizacja generatora liczb losowych z podanym seedem
 		std::mt19937 randomGen(mapseed);
 		std::uniform_int_distribution<int> randomSideDist(1, 4); // Dystrybucja do losowania strony (1-4)
@@ -83,12 +83,23 @@ public:
 
 		//Inicjalizacja mapy
 		std::vector<std::string> mapFile;
-		Map map;
+		GameMap map;
 
 		map.saveName = "NewMap1"; // TODO: naming not implemented yet
 		map.gameVersion = "0.0.1-InDev"; // TODO: versioning not implemented yet
 		map.sizeX = 100;
 		map.sizeY = 100;
+		
+		
+		for (int i = 0; i < map.sizeX; i++) {
+			map.mapImage.emplace_back(std::vector<Room>());
+			for (int j = 0; j < map.sizeY; j++) {
+
+				map.mapImage[i].emplace_back(Room{});
+			}
+		}
+		
+		
 
 		MapRoomCell defaultCell;
 		defaultCell.visited = false;
@@ -240,10 +251,12 @@ public:
 		for (int x = 0; x < map.sizeX; x++) {
 			for (int y = 0; y < map.sizeY; y++) {
 				if (!mapCells[x][y].exitRotations.empty()) {
-					std::cout << mapCells[x][y].room.name<<"\n";
+					map.mapImage[x][y] = mapCells[x][y].room;
 				}
 			}
 		}
+
+		return map;
 		
 		
 	}
