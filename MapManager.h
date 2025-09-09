@@ -204,25 +204,47 @@ public:
 			}
 		}
 		
-
+		
 		clearConsole();
+
+		int foundRoomsRotCounter = 0;
+		for (int x = 0; x < map.sizeX; x++) {
+			for (int y = 0; y < map.sizeY; y++) {
+				if (!mapCells[x][y].exitRotations.empty()) {
+					
+					
+					for (int i : mapCells[x][y].exitRotations) {
+						for (Room roomi : rooms) {
+							bool allMatch = true;
+							for (int requiredExit : mapCells[x][y].exitRotations) {
+								if (std::find(roomi.exitRotations.begin(), roomi.exitRotations.end(), requiredExit) == roomi.exitRotations.end()) {
+									allMatch = false;
+									break;
+								}
+							}
+
+							if (allMatch) {
+								mapCells[x][y].room = roomi;
+								break;
+							}
+						}
+						
+					}
+					
+				}
+			}
+
+		}
+		
 
 		for (int x = 0; x < map.sizeX; x++) {
 			for (int y = 0; y < map.sizeY; y++) {
 				if (!mapCells[x][y].exitRotations.empty()) {
-					if(mapCells[x][y].exitRotations[0] == 1){ setCursorPos(mapCells[x][y].posX, mapCells[x][y].posY); std::cout << u8"╝"; }
-					if(mapCells[x][y].exitRotations[0] == 2){ setCursorPos(mapCells[x][y].posX, mapCells[x][y].posY); std::cout << u8"═"; }
-					if(mapCells[x][y].exitRotations[0] == 3){ setCursorPos(mapCells[x][y].posX, mapCells[x][y].posY); std::cout << u8"╗"; }
-					if(mapCells[x][y].exitRotations[0] == 4){ setCursorPos(mapCells[x][y].posX, mapCells[x][y].posY); std::cout << u8"L"; }
+					std::cout << mapCells[x][y].room.name<<"\n";
 				}
 			}
 		}
-
 		
-		
-		
-
-
 		
 	}
 };
