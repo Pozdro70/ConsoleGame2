@@ -15,6 +15,7 @@ int main()
 {
 	#ifdef _WIN32
 		SetConsoleOutputCP(CP_UTF8); // Windows UTF-8 console
+		remove_scrollbar();
 	#endif
 	/* FASTER PRINTING
 	std::ios_base::sync_with_stdio(0);
