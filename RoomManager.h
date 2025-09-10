@@ -5,6 +5,8 @@
 #include <iostream>
 #include <sstream>
 
+static int noRoomCode = 2137;
+
 //Typ pomieszczenia
 enum RoomType {
 	IRoom=1,
@@ -26,7 +28,7 @@ enum RoomExitRotation {
 //Klasa pomieszczenia
 class Room {
 public:
-	int id;
+	int id= noRoomCode;
 	std::string name;
 	std::string fname;
 	RoomType roomType;
@@ -35,6 +37,8 @@ public:
 	std::vector<RoomExitRotation> exitRotations;
 	std::vector<std::vector<int>> exitOffsets;
 	std::vector<int> entranceOffset;
+	int sizeX;
+	int sizeY;
 };
 
 
@@ -195,6 +199,31 @@ public:
 				room.entranceOffset.emplace_back(atoi(roominoffset.c_str()));
 				getline(roomlineInOffsetSsCord, roominoffset, ';');
 				room.entranceOffset.emplace_back(atoi(roominoffset.c_str()));
+
+				//wczytywanie skali pomieszczenia
+
+				//skala X
+				getline(roomFile, roomline);
+
+				std::stringstream roomlineScaleXSS(roomline);
+				std::string roomscalexline;
+
+				getline(roomlineScaleXSS, roomscalexline,':');
+				getline(roomlineScaleXSS, roomscalexline,':');
+
+				room.sizeX = std::atoi(roomscalexline.c_str());
+
+				//skala Y
+
+				getline(roomFile, roomline);
+
+				std::stringstream roomlineScaleYSS(roomline);
+				std::string roomscaleyline;
+
+				getline(roomlineScaleYSS, roomscaleyline, ':');
+				getline(roomlineScaleYSS, roomscaleyline, ':');
+
+				room.sizeY = std::atoi(roomscaleyline.c_str());
 
 				//wczytywanie grafiki pomieszczenia
 				getline(roomFile, roomline);

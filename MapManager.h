@@ -347,5 +347,24 @@ public:
 		return gmap;
 	}
 
-};
 
+	void putMapOnScreen(GameMap gmap) {
+		clearConsole();
+		RoomManager roomManager;
+		std::vector<Room> rooms = roomManager.loadMapRooms();
+
+		for (int x = 0; x < gmap.sizeX; x++) {
+			for (int y = 0; y < gmap.sizeY; y++) {
+				if (gmap.mapImage[x][y].id != noRoomCode) {
+					// Compute screen coordinates based on room size
+					long xpos = (x * 23);
+					long ypos = (y * 20);
+
+					placeRoom(gmap.mapImage[x][y], xpos, ypos);
+				}
+			}
+		}
+	}
+
+
+};

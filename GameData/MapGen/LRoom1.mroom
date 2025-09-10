@@ -8,12 +8,14 @@ exitsoffset:
 8;7
 endexitoffset;
 entranceoffset:1;2
+sizeX:11
+sizeY:7
 room:
-  ╔═══════╗
-══╝       ║
-          ║ 
-══╗       ║
-  ╚══╗ ╔══╝
-     ║ ║
-     ║ ║
+       ╔═══════╗
+═══════╝       ║
+               ║ 
+═══════╗       ║
+       ╚══╗ ╔══╝
+          ║ ║
+          ║ ║
 roomend;

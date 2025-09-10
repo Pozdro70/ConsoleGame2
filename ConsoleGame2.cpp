@@ -15,24 +15,25 @@ int main()
 {
 	#ifdef _WIN32
 		SetConsoleOutputCP(CP_UTF8); // Windows UTF-8 console
-		remove_scrollbar();
+		//remove_scrollbar();
 	#endif
 	/* FASTER PRINTING
 	std::ios_base::sync_with_stdio(0);
 	std::cin.tie(0);
 	*/
 
-	//_getch(); // Pause before start
+	_getch(); // Pause before start
 	
 	
 	MapManager mapManager;
 	GameMap gmap;
 	gmap=mapManager.generateMap(time(nullptr),"Game1", "Game1.msave", "InDev-0.1", 10, 10);
 	
-
+	mapManager.putMapOnScreen(gmap);
 
 
 	//mapManager.saveGameMap(gmap);
+	/*
 	GameMap gmap2;
 	gmap2 =mapManager.loadMapFromFile("Game1.msave");
 
@@ -41,7 +42,7 @@ int main()
 			setCursorPos(x, y); std::cout << gmap2.mapImage[x][y].id;
 		}
 	}
-
+	*/
 	//dispAllRooms();
 	return 0;
 
