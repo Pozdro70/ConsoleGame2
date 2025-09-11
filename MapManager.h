@@ -269,7 +269,7 @@ public:
 		saveFile << "map:\n";
 		for (int x = 0; x < gmap.sizeX; x++) {
 			for (int y = 0; y < gmap.sizeY; y++) {
-				saveFile << gmap.mapImage[y][x].id<<";";
+				saveFile << gmap.mapImage[x][y].id<<";"; //SWITCHED [y][x] to [x][y]
 			}
 			saveFile << "\n";
 		}
@@ -358,7 +358,7 @@ public:
 				if (gmap.mapImage[x][y].id != noRoomCode) {
 					// Compute screen coordinates based on room size
 					long xpos = (x * 23);
-					long ypos = (y * 20);
+					long ypos = (y*9);
 
 					placeRoom(gmap.mapImage[x][y], xpos, ypos);
 				}
